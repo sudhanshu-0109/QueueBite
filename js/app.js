@@ -90,8 +90,13 @@ const App = (() => {
   }
 
   function renderCurrentView() {
-    const content = document.getElementById('page-content');
+    let content = document.getElementById('page-content');
     if (!content) return;
+
+    // Clone and replace the content node to wipe accumulated event listeners
+    const newContent = content.cloneNode(false);
+    content.parentNode.replaceChild(newContent, content);
+    content = newContent;
 
     content.innerHTML = UI.renderView(currentView);
     const viewEl = content.querySelector(`[id^="view-"]`);
@@ -201,7 +206,11 @@ const App = (() => {
   }
 
   /* ========== APP EVENTS ========== */
+  let appEventsBound = false;
   function bindAppEvents() {
+    if (appEventsBound) return;
+    appEventsBound = true;
+
     // Sidebar nav
     document.addEventListener('click', (e) => {
       const navItem = e.target.closest('.nav-item[data-view]');
