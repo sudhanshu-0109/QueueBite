@@ -924,6 +924,8 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  line-height: 1;
   font-size: 3rem;
   background: linear-gradient(135deg, var(--bg) 0%, var(--border) 100%);
 }

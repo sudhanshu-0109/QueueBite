@@ -146,6 +146,39 @@
     flex-shrink: 0;
   }
 
+  /* --- Menu Page Specific Tablet Fixes --- */
+  #view-menu {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .category-chips::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for clean horizontal scroll */
+  }
+
+  .menu-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .menu-card-name {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: normal;
+  }
+
+  .menu-card-meta {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .menu-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   /* Admin tables horizontal overflow */
   .data-table {
     min-width: 800px;
@@ -162,8 +195,13 @@
 
 /* ---------- Mobile (≤ 480px) ---------- */
 @media (max-width: 480px) {
-  .menu-grid, .stat-cards, .grid-3, .grid-4, .category-grid {
+  .stat-cards, .grid-3, .grid-4, .category-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 
   .topbar {
@@ -276,6 +314,49 @@
     min-height: 44px;
   }
 
+  /* --- Menu Page Specific Mobile Fixes --- */
+  #view-menu > .flex {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px !important;
+  }
+  
+  .search-bar {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .filter-select {
+    width: 100%;
+    min-height: 44px;
+    box-sizing: border-box;
+  }
+
+  .menu-card-img,
+  .menu-card-img-placeholder {
+    height: 110px; /* Smaller image to fit 2-column mobile layout */
+  }
+
+  .menu-card-body {
+    padding: 10px;
+  }
+
+  .menu-card-name {
+    font-size: 0.85rem;
+  }
+
+  .menu-card-meta {
+    gap: 4px;
+    font-size: 0.7rem;
+    margin-bottom: 8px;
+  }
+
+  .menu-card-add {
+    width: 44px;
+    height: 44px; /* Enforce 44px touch target */
+    flex-shrink: 0;
+  }
+
   /* Mobile Cart Item */
   .cart-item {
     flex-wrap: wrap;
@@ -283,12 +364,6 @@
   }
   .cart-item-info {
     flex: 1 1 100%;
-  }
-  
-  /* Menu Card Image */
-  .menu-card-img-placeholder {
-    height: 120px;
-    font-size: 3rem;
   }
 }
 
@@ -300,6 +375,11 @@
 
   .stat-value {
     font-size: 1.6rem;
+  }
+  
+  .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
   }
   
   .btn {
