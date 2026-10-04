@@ -334,7 +334,7 @@
 
   .menu-card-img,
   .menu-card-img-placeholder {
-    height: 110px; /* Smaller image to fit 2-column mobile layout */
+    display: none !important; /* Completely hide images on phones */
   }
 
   .menu-card-body {
