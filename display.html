@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOW SERVING - SmartCanteen</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <script src="js/storage.js"></script>
+</head>
+<body class="display-screen">
+  
+  <div class="display-title">NOW SERVING</div>
+  <div class="display-token" id="current-token">---</div>
+  <div class="display-status" id="current-status">Counter -</div>
+
+  <div class="display-ready-list">
+    <div class="display-ready-title">Please Collect</div>
+    <div class="display-ready-tokens" id="ready-tokens">
+      <!-- Ready tokens will appear here -->
+    </div>
+  </div>
+
+  <script>
+    function updateDisplay() {
+      const orders = Storage.load('sc_orders', []);
+      const readyOrders = orders.filter(o => o.status === 'ready').sort((a, b) => new Date(b.readyAt) - new Date(a.readyAt));
+      
+      const currentTokenEl = document.getElementById('current-token');
+      const currentStatusEl = document.getElementById('current-status');
+      const readyListEl = document.getElementById('ready-tokens');
+
+      if (readyOrders.length > 0) {
+        const latest = readyOrders[0];
+        // Only trigger visual change if it's a new latest token
+        if (currentTokenEl.textContent !== latest.token) {
+          currentTokenEl.textContent = latest.token;
+          currentStatusEl.textContent = `Counter ${latest.counter}`;
+          
+          // Optional: Beep sound when new token is called
+          try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            osc.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+            osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15); // E5
+            osc.start();
+            osc.stop(ctx.currentTime + 0.3);
+          } catch (e) {
+            console.log('Audio disabled by browser policy until interaction');
+          }
+        }
+        
+        readyListEl.innerHTML = readyOrders.slice(1, 9).map(o => 
+          `<div class="display-ready-token">${o.token}</div>`
+        ).join('');
+      } else {
+        currentTokenEl.textContent = '---';
+        currentStatusEl.textContent = 'Preparing next orders...';
+        readyListEl.innerHTML = '<div style="color:var(--muted)">No orders waiting for pickup</div>';
+      }
+    }
+
+    // Initial render
+    updateDisplay();
+
+    // Listen for cross-tab updates (Storage events)
+    Storage.onStorageChange((key) => {
+      if (key === 'sc_orders') {
+        updateDisplay();
+      }
+    });
+
+    // Check periodically in case storage event misses
+    setInterval(updateDisplay, 5000);
+  </script>
+</body>
+</html>
